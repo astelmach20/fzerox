@@ -5567,20 +5567,20 @@ Gfx* Racer_Draw(Gfx* gfx, s32 playerIndex) {
     camera = &gCameras[playerIndex];
 
     sp56C = (camera->basis.x.x * 100.0f) - camera->eye.x;
-    sp568 = (camera->basis.x.y * 100.0f) - camera->eye.y;
+    temp_fv0 = (camera->basis.x.y * 100.0f) - camera->eye.y;
     sp564 = (camera->basis.x.z * 100.0f) - camera->eye.z;
 
     sp580.m[3][2] = camera->projectionMtx.m[3][2] -
                     (camera->projectionMtx.m[2][2] *
-                     (sp580.m[3][3] = ((-sp56C * camera->viewMtx.m[0][2]) - (sp568 * camera->viewMtx.m[1][2])) -
+                     (sp580.m[3][3] = ((-sp56C * camera->viewMtx.m[0][2]) - (temp_fv0 * camera->viewMtx.m[1][2])) -
                                       (sp564 * camera->viewMtx.m[2][2])));
     sp580.m[3][0] =
         (camera->projectionMtx.m[0][0] *
-         ((sp56C * camera->viewMtx.m[0][0]) + (sp568 * camera->viewMtx.m[1][0]) + (sp564 * camera->viewMtx.m[2][0]))) -
+         ((sp56C * camera->viewMtx.m[0][0]) + (temp_fv0 * camera->viewMtx.m[1][0]) + (sp564 * camera->viewMtx.m[2][0]))) -
         (camera->projectionMtx.m[2][0] * sp580.m[3][3]);
     sp580.m[3][1] =
         (camera->projectionMtx.m[1][1] *
-         ((sp56C * camera->viewMtx.m[0][1]) + (sp568 * camera->viewMtx.m[1][1]) + (sp564 * camera->viewMtx.m[2][1]))) -
+         ((sp56C * camera->viewMtx.m[0][1]) + (temp_fv0 * camera->viewMtx.m[1][1]) + (sp564 * camera->viewMtx.m[2][1]))) -
         (camera->projectionMtx.m[2][1] * sp580.m[3][3]);
 
     sp580.m[0][0] = camera->projectionViewMtx.m[0][0];
@@ -6847,28 +6847,28 @@ block_115:
                     (playerRacer->racerBehind->stateFlags & RACER_STATE_RETIRED)) {
                     break;
                 }
-                sp56C = playerRacer->segmentPositionInfo.pos.x - playerRacer->racerBehind->segmentPositionInfo.pos.x;
-                sp568 = playerRacer->segmentPositionInfo.pos.y - playerRacer->racerBehind->segmentPositionInfo.pos.y;
+                temp_fv1 = playerRacer->segmentPositionInfo.pos.x - playerRacer->racerBehind->segmentPositionInfo.pos.x;
+                sp538 = playerRacer->segmentPositionInfo.pos.y - playerRacer->racerBehind->segmentPositionInfo.pos.y;
                 sp564 = playerRacer->segmentPositionInfo.pos.z - playerRacer->racerBehind->segmentPositionInfo.pos.z;
-                temp_fs2 = (sp56C * camera->basis.x.x) + (sp568 * camera->basis.x.y) + (sp564 * camera->basis.x.z);
+                temp_fs2 = (temp_fv1 * camera->basis.x.x) + (sp538 * camera->basis.x.y) + (sp564 * camera->basis.x.z);
                 if (temp_fs2 < 0.0f) {
                     break;
                 }
-                temp_fs1 = (sp56C * camera->basis.z.x) + (sp568 * camera->basis.z.y) + (sp564 * camera->basis.z.z);
-                temp_fs3 = (sp56C * camera->basis.y.x) + (sp568 * camera->basis.y.y) + (sp564 * camera->basis.y.z);
+                temp_fs1 = (temp_fv1 * camera->basis.z.x) + (sp538 * camera->basis.z.y) + (sp564 * camera->basis.z.z);
+                temp_fs3 = (temp_fv1 * camera->basis.y.x) + (sp538 * camera->basis.y.y) + (sp564 * camera->basis.y.z);
                 temp_fv0 = SQ(temp_fs1) + SQ(temp_fs3);
 
                 if ((temp_fv0 < 0.1f)) {
                     break;
                 }
-                sp56C = ((camera->currentScissorRight - camera->currentScissorLeft) * 0.5f) + 4.0f;
-                sp568 = ((camera->currentScissorBottom - camera->currentScissorTop) * 0.5f) - 4.0f;
-                temp_fv0 = sqrtf((SQ(sp56C) + SQ(sp568)) / temp_fv0);
+                temp_fa1 = ((camera->currentScissorRight - camera->currentScissorLeft) * 0.5f) + 4.0f;
+                sp538 = ((camera->currentScissorBottom - camera->currentScissorTop) * 0.5f) - 4.0f;
+                temp_fv0 = sqrtf((SQ(temp_fa1) + SQ(sp538)) / temp_fv0);
                 temp_fs1 *= temp_fv0;
                 temp_fs3 *= temp_fv0;
 
-                if (sp568 < temp_fs3) {
-                    temp_fv0 = sp568 / temp_fs3;
+                if (sp538 < temp_fs3) {
+                    temp_fv0 = sp538 / temp_fs3;
                     temp_fs1 *= temp_fv0;
                     temp_fs3 *= temp_fv0;
                 }

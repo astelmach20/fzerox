@@ -1536,7 +1536,7 @@ Gfx* Transition_PhasedStripsDraw(Gfx* gfx, Transition* transition) {
     s32 sp30[2];
     s32 width = TRANSITION_BACKGROUND_WIDTH;
     s32 top;
-    s32 xl;
+    s16 xl;
     s32 xh;
     s32 yl;
     s32 yh;
@@ -1551,7 +1551,7 @@ Gfx* Transition_PhasedStripsDraw(Gfx* gfx, Transition* transition) {
     backgroundTexture = transition->backgroundBuffer;
     stripLeftPtr = transition->workBuffer;
 
-    for (strip = 0; strip < sp30[1]; strip++) {
+    for (strip = 0; strip <= sp30[1] - 1; strip++) {
         gDPPipeSync(gfx++);
         gDPLoadTextureTile(gfx++, backgroundTexture + strip * (TRANSITION_BACKGROUND_WIDTH * PHASED_STRIP_HEIGHT),
                            G_IM_FMT_RGBA, G_IM_SIZ_16b, TRANSITION_BACKGROUND_WIDTH, PHASED_STRIP_HEIGHT, 0, 0,
@@ -1572,7 +1572,7 @@ Gfx* Transition_PhasedStripsDraw(Gfx* gfx, Transition* transition) {
             stripLeftPtr++;
 
             gSPScisTextureRectangle(gfx++, xl, (top + TRANSITION_BORDER_HEIGHT) << 2, xh,
-                                    (top + (TRANSITION_BORDER_HEIGHT + 1)) << 2, 0, 0, stripRow << 5, 1 << 10, 1 << 10);
+                                    (top + (TRANSITION_BORDER_HEIGHT + 1)) * 4, 0, 0, stripRow << 5, 1 << 10, 1 << 10);
         }
     }
 

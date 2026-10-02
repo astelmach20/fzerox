@@ -3,6 +3,7 @@
 import argparse
 import git
 import os
+import re
 import subprocess
 import sys
 from colour import Color
@@ -12,6 +13,8 @@ root_dir = os.path.join(script_dir, "..")
 asm_dir = os.path.join(root_dir, "asm", "us", "rev0", "nonmatchings")
 build_dir = os.path.join(root_dir, "build", "us", "rev0")
 elf_path = os.path.join(build_dir, "fzerox.us.rev0.elf")
+src_dir = os.path.join(root_dir, "src")
+global_asm_re = re.compile(r'GLOBAL_ASM\("asm/us/rev0/nonmatchings/(?:\w+/)*(\w+)\.s"\)')
 
 def get_func_sizes():
     try:
@@ -34,6 +37,16 @@ def get_func_sizes():
 
     return sizes, total
 
+def get_global_asm_funcs():
+    funcs = set()
+    for root, dirs, files in os.walk(src_dir):
+        for f in files:
+            if f.endswith(".c"):
+                with open(os.path.join(root, f)) as c_file:
+                    funcs.update(global_asm_re.findall(c_file.read()))
+
+    return funcs
+
 def get_nonmatching_funcs():
     funcs = set()
     for root, dirs, files in os.walk(asm_dir):
@@ -41,7 +54,7 @@ def get_nonmatching_funcs():
             if f.endswith(".s"):
                 funcs.add(f[:-2])
 
-    return funcs
+    return funcs & get_global_asm_funcs()
 
 def get_funcs_sizes(sizes, matchings, nonmatchings):
     msize = 0

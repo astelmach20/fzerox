@@ -574,26 +574,21 @@ Gfx* func_i6_8011D168(Gfx* gfx, s32 arg1, s32 arg2) {
 extern GfxPool* gGfxPool;
 extern s32 D_800DCCFC;
 
-#ifdef NON_MATCHING
+#if defined(NON_MATCHING) || defined(VERSION_US)
 void func_i6_8011D394(void) {
     s32 i;
     s32 j;
     s32 k;
     Vtx* vtx;
     s32 temp_a2;
-    s32 temp_a3;
     s32 var_s0;
     s32 var_s1;
-    f32 temp_fv0;
     f32 temp_fv1;
-    f32 sp28[4];
-    f32 sp38[4];
-    f32 sp48[4];
-    f32 sp58[4];
     s32 x;
     s32 y;
     s32 s;
     s32 t;
+    s16* ptr;
 
     switch (D_i6_801247A8) {
         case 0:
@@ -606,10 +601,11 @@ void func_i6_8011D394(void) {
             break;
         case 2:
             temp_a2 = (11 - ((D_i6_801247AA * 11) / 120));
-            temp_a3 = (16 - ((D_i6_801247AA * 16) / 120));
+            var_s1 = (16 - ((D_i6_801247AA * 16) / 120));
+            ptr = D_i6_80124620;
             for (i = 0; i < 16; i++) {
 
-                if (i < temp_a3) {
+                if (i < var_s1) {
                     continue;
                 }
 
@@ -617,9 +613,9 @@ void func_i6_8011D394(void) {
                     if (j < temp_a2) {
                         continue;
                     }
-                    D_i6_80124620[i * 11 + j] -= 5;
-                    if (D_i6_80124620[i * 11 + j] < 0) {
-                        D_i6_80124620[i * 11 + j] = 0;
+                    ptr[i * 11 + j] = ptr[i * 11 + j] - 5;
+                    if (ptr[i * 11 + j] < 0) {
+                        ptr[i * 11 + j] = 0;
                     }
                 }
             }
@@ -640,28 +636,34 @@ void func_i6_8011D394(void) {
     for (i = 0; i < 15; i++) {
 
         for (j = 0; j < 10; j++) {
-            temp_fv0 = i * var_s1;
+            f32 sp28[4];
+            f32 sp38[4];
+            f32 sp48[4];
+            f32 sp58[4];
+
             temp_fv1 = j * var_s0;
 
             sp48[0] = sp48[2] = temp_fv1 - 0.5f;
             sp48[1] = sp48[3] = sp48[0] + var_s0;
 
-            sp58[0] = sp58[1] = temp_fv0 - 0.5f;
+            sp58[0] = sp58[1] = (f32)(i * var_s1) - 0.5f;
             sp58[2] = sp58[3] = sp58[0] + var_s1;
 
             sp28[0] = sp28[2] = (temp_fv1 + 0.0f) - 2.0f;
             sp28[1] = sp28[3] = sp28[0] + var_s0;
 
-            sp38[0] = sp38[1] = (temp_fv0 + 0.0f) - 2.0f;
+            sp38[0] = sp38[1] = ((f32)(i * var_s1) + 0.0f) - 2.0f;
             sp38[2] = sp38[3] = sp38[0] + var_s1;
 
-            for (k = 0; k < 4; k++) {
-                x = sp28[k];
-                y = sp38[k];
-                s = sp48[k] * 32.0f;
-                t = sp58[k] * 32.0f;
-                SET_VTX(vtx, x, y, 0, s, t, 255, 255, 255, D_i6_80124620[i * 11 + j + (k & 1) + ((k >> 1) * 11)]);
-                vtx++;
+            if (1) {
+                for (k = 0; k < 4; k++) {
+                    x = sp28[k];
+                    y = sp38[k];
+                    s = sp48[k] * 32.0f;
+                    t = sp58[k] * 32.0f;
+                    SET_VTX(vtx, x, y, 0, s, t, 255, 255, 255, D_i6_80124620[i * 11 + j + (k & 1) + ((k >> 1) * 11)]);
+                    vtx++;
+                }
             }
         }
     }
@@ -670,8 +672,6 @@ void func_i6_8011D394(void) {
 #ifndef EXPANSION_KIT
 #ifdef VERSION_JP
 #pragma GLOBAL_ASM("asm/jp/rev0/nonmatchings/overlays/ovl_i6/options_menu/func_i6_8011D394.s")
-#elif VERSION_US
-#pragma GLOBAL_ASM("asm/us/rev0/nonmatchings/overlays/ovl_i6/options_menu/func_i6_8011D394.s")
 #elif VERSION_PAL
 #pragma GLOBAL_ASM("asm/pal/rev0/nonmatchings/overlays/ovl_i6/options_menu/func_i6_8011D394.s")
 #endif
